@@ -6,7 +6,9 @@ const websiteNameEL = document.getElementById('website-name');
 const websiteUrlEL = document.getElementById('website-url');
 const bookmarkContainer = document.getElementById('bookmark-container');
 
-let bookmarks = {};
+let bookmarks = [
+    { name: 'Google', url: 'https://www.google.com' },
+];
 
 // Show Modal, Focus on input
 function showModal(){
@@ -44,15 +46,15 @@ function buildBookmarks(){
     // remove all bookmarks from container
     bookmarkContainer.textContent = '';
 
-    Object.keys(bookmarks).forEach((id) => {
-        const {name, url} = bookmarks[id];
+    bookmarks.forEach((bookmark) => {
+        const {name, url} = bookmark;
         const Item = document.createElement('div');
         Item.classList.add('item');
         // close icon
         const closeIcon = document.createElement('i');
         closeIcon.classList.add('fas', 'fa-solid',  'fa-times');
         closeIcon.setAttribute('title', 'Delete Bookmark');
-        closeIcon.setAttribute('onclick', `deleteBookmark('${id}')`);
+        closeIcon.setAttribute('onclick', `deleteBookmark('${url}')`);
         // favicon / link container
         const linkInfo = document.createElement('div');
         linkInfo.classList.add('name');
@@ -68,7 +70,7 @@ function buildBookmarks(){
         // append to bookmarks container
         linkInfo.append(favicon, link);
         Item.append(closeIcon, linkInfo);
-        bookmarkContainer.append(Item);
+        bookmarkContainer.appendChild(Item);
 
     });
 }
@@ -81,22 +83,22 @@ function fetchBookmarks(){
 
    }else{
        const id = `https://google.com`;
-       bookmarks[id] = 
+       bookmarks= [
               {
                     name: 'Google',
                     url: 'https://www.google.com'
                 },
-       
+       ];
        storeBookmarkInLocalStorage(bookmarks);
    }
    buildBookmarks();
 }
 
 // delete bookmark
-    function deleteBookmark(id){
-        if (bookmarks[id]){
-            delete bookmarks[id];
-            
+    function deleteBookmark(url){
+        if (confirm('Are you sure you want to delete this bookmark?')){
+            bookmarks = bookmarks.filter(bookmark => bookmark.url !== url);
+               console.log(bookmarks); 
         }
         storeBookmarkInLocalStorage(bookmarks);
         fetchBookmarks();
