@@ -6,9 +6,7 @@ const websiteNameEL = document.getElementById('website-name');
 const websiteUrlEL = document.getElementById('website-url');
 const bookmarkContainer = document.getElementById('bookmark-container');
 
-let bookmarks = [
-    { name: 'Google', url: 'https://www.google.com' },
-];
+let bookmarks = [];
 
 // Show Modal, Focus on input
 function showModal(){
@@ -73,6 +71,7 @@ function buildBookmarks(){
         bookmarkContainer.appendChild(Item);
 
     });
+    console.log(bookmarks);
 }
 
 
@@ -94,15 +93,18 @@ function fetchBookmarks(){
    buildBookmarks();
 }
 
-// delete bookmark
-    function deleteBookmark(url){
-        if (confirm('Are you sure you want to delete this bookmark?')){
-            bookmarks = bookmarks.filter(bookmark => bookmark.url !== url);
-               console.log(bookmarks); 
-        }
-        storeBookmarkInLocalStorage(bookmarks);
-        fetchBookmarks();
-    }
+// Delete Bookmark
+function deleteBookmark(url) {
+    // Loop through the bookmarks array
+    bookmarks.forEach((bookmark, i) => {
+      if (bookmark.url === url) {
+        bookmarks.splice(i, 1);
+      }
+    });
+    // Update bookmarks array in localStorage, re-populate DOM
+    storeBookmarkInLocalStorage(bookmarks);
+    fetchBookmarks();
+  }
 
     
 // Store Bookmark
@@ -120,7 +122,7 @@ function storeBookmark(e){
         return false;
     }
     // Create bookmark object
-    const bookmark = {
+    let bookmark = {
         name: nameValue,
         url: urlValue
 }
