@@ -99,7 +99,7 @@ a:active{
 .fa-solid {
   color: var(--headline-color);
   cursor: pointer;
-  float:right;
+  float: right;
   z-index: 2;
 }
 

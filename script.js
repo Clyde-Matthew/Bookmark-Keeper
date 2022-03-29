@@ -6,7 +6,10 @@ const websiteNameEL = document.getElementById('website-name');
 const websiteUrlEL = document.getElementById('website-url');
 const bookmarkContainer = document.getElementById('bookmark-container');
 
-let bookmarks = [];
+let bookmarks = [{
+    name: 'Google',
+    url: 'https://www.google.com'
+}];
 
 // Show Modal, Focus on input
 function showModal(){
@@ -39,40 +42,40 @@ function validateForm(nameValue, urlValue){
     } 
 }
 
-// build bookmarks
-function buildBookmarks(){
-    // remove all bookmarks from container
+/// Build Bookmarks
+function buildBookmarks() {
+    // Remove all bookmark elements
     bookmarkContainer.textContent = '';
-
-    bookmarks.forEach((bookmark) => {
-        const {name, url} = bookmark;
-        const Item = document.createElement('div');
-        Item.classList.add('item');
-        // close icon
-        const closeIcon = document.createElement('i');
-        closeIcon.classList.add('fas', 'fa-solid',  'fa-times');
-        closeIcon.setAttribute('title', 'Delete Bookmark');
-        closeIcon.setAttribute('onclick', `deleteBookmark('${url}')`);
-        // favicon / link container
-        const linkInfo = document.createElement('div');
-        linkInfo.classList.add('name');
-        // favicon  
-        const favicon = document.createElement('img');
-        favicon.setAttribute('src', `https://s2.googleusercontent.com/s2/favicons?domain=${url}`);
-        favicon.setAttribute('alt', 'favicon');
-        // Link
-        const link = document.createElement('a');
-        link.setAttribute('href', `${url}`); 
-        link.setAttribute('target', '_blank');
-        link.textContent = name;
-        // append to bookmarks container
-        linkInfo.append(favicon, link);
-        Item.append(closeIcon, linkInfo);
-        bookmarkContainer.appendChild(Item);
-
-    });
     console.log(bookmarks);
-}
+    // Build items
+    bookmarks.forEach((bookmark) => {
+      const { name, url } = bookmark;
+      // Item
+      const item = document.createElement('div');
+      item.classList.add('item');
+      // Close Icon
+      const closeIcon = document.createElement('i');
+      closeIcon.classList.add('fas', 'fa-times');
+      closeIcon.setAttribute('title', 'Delete Bookmark');
+      closeIcon.setAttribute('onclick', `deleteBookmark('${url}')`);
+      // Favicon / Link Container
+      const linkInfo = document.createElement('div');
+      linkInfo.classList.add('name');
+      // Favicon
+      const favicon = document.createElement('img');
+      favicon.setAttribute('src', `https://s2.googleusercontent.com/s2/favicons?domain=${url}`);
+      favicon.setAttribute('alt', 'Favicon');
+      // Link
+      const link = document.createElement('a');
+      link.setAttribute('href', `${url}`);
+      link.setAttribute('target', '_blank');
+      link.textContent = name;
+      // Append to bookmarks container
+      linkInfo.append(favicon, link);
+      item.append(closeIcon, linkInfo);
+      bookmarkContainer.appendChild(item);
+    });
+  }
 
 
 // fetch bookmarks from local storage
@@ -82,29 +85,29 @@ function fetchBookmarks(){
 
    }else{
        const id = `https://google.com`;
-       bookmarks= [
+       bookmarks = [
               {
                     name: 'Google',
                     url: 'https://www.google.com'
                 },
-       ];
+       ]
        storeBookmarkInLocalStorage(bookmarks);
    }
    buildBookmarks();
 }
 
-// Delete Bookmark
-function deleteBookmark(url) {
-    // Loop through the bookmarks array
-    bookmarks.forEach((bookmark, i) => {
-      if (bookmark.url === url) {
-        bookmarks.splice(i, 1);
-      }
-    });
-    // Update bookmarks array in localStorage, re-populate DOM
-    storeBookmarkInLocalStorage(bookmarks);
-    fetchBookmarks();
-  }
+// delete bookmark
+    function deleteBookmark(url){
+        // delete bookmark from bookmarks array
+        if(confirm('Are you sure you want to delete this bookmark?')){
+            bookmarks.splice(url, 1);
+            // store bookmarks in local storage
+           
+        }
+       
+        storeBookmarkInLocalStorage(bookmarks);
+        fetchBookmarks();
+    }
 
     
 // Store Bookmark
@@ -122,7 +125,7 @@ function storeBookmark(e){
         return false;
     }
     // Create bookmark object
-    let bookmark = {
+    const bookmark = {
         name: nameValue,
         url: urlValue
 }
